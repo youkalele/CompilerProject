@@ -1,5 +1,5 @@
 package parser;
 
-public class funDecl extends Declaration{
+public class funDecl extends Declaration {
 
 }
