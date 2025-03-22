@@ -1,5 +1,6 @@
 
 import parser.CompoundStatement;
+import parser.ReturnStatement;
 import scanner.Token;
 
 package parser;
@@ -30,7 +31,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         Program retProg = new Program();
         //get first token
         while (scan.viewNextToken().getType() != Token.TokenType.EOF) {
-            retProg.addDecl(parseDecl());
+            retProg.addDecl(parseDecl(false));
         }
         //Remember that program REQURES at least ONE decl; throw an error if there are no decls
         return retProg;
@@ -67,7 +68,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             match(TokenType.CLOSE_BRACKET);
             match(TokenType.SEMI);
             return new VarDecl(id, arrayVal);//constructor needs to handle either array or not array
-        } else if (local && scan.viewNextToken().getType() == Token.TokenType.OPEN_PAREN) {
+        } else if (!local && scan.viewNextToken().getType() == Token.TokenType.OPEN_PAREN) {
             scan.getNextToken();
             return parseFunDecl1(Token.TokenType.INT, id);
         } else {
@@ -82,10 +83,17 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         if (scan.viewNextToken().getType() != Token.TokenType.VOID) {
             retDecl.setVoid();
             match(TokenType.CLOSE_PAREN);
-        } else {
-            while (scan.viewNextToken().getType() != Token.TokenType.CLOSE_PAREN) {
+        } 
+        else {
+            for(int i=1; i>0; i--){
                 retDecl.addParam(parseParam());
+                if(scan.viewNextToken().getType() == Token.TokenType.COMMA)
+                    i++;
+                else if(scan.viewNextToken().getType() != Token.TokenType.CLOSE_PAREN)
+                    //error non-delimited params
+                
             }
+            match(TokenType.CLOSE_PAREN);
         }
 
         retDecl.setBody(parseCompoundStatement());
@@ -116,55 +124,112 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         while (scan.viewNextToken().getType() == TokenType.INT) {
             retStmt.addDecl(parseDecl(true));
         }
-        while (scan.viewNextToken().getType() == TokenType.CLOSE_CURLY) {
+        while (scan.viewNextToken().getType() != TokenType.CLOSE_CURLY) {
             retStmt.addStmt(parseStatement());
         }
-        //while stmt addStmt()
-        //How to ensure that all decls come before all stmts? perchance generate the first/follow set? all local decls do have to start with int and no stmts do tho
-        return null;
+
+        match(TokenType.CLOSE_CURLY);
+
+        return retStmt;
     }
 
-    public Program parseProgram() //6
+    public Statement parseStatement() //6
+    {
+        switch (scan.viewNextToken().getType()) {
+            case TokenType.OPEN_CURLY:
+                return parseCompoundStatement();
+                break;
+            case TokenType.IF:
+                return parseSelectionStatement();
+                break;
+            case TokenType.WHILE:
+                return parseIterationStatement();
+                break;
+            case TokenType.RETURN:
+                return parseReturnStatement();
+                break;
+            default
+                return parseExpressionStatement();
+                break;
+        }
+    }
+
+    public Statement parseSelectionStatement() //7
+    {
+        Statement retStmt = new SelectionStatement();
+        match(TokenType.IF);
+        match(TokenType.OPEN_PAREN);
+        retStmt.addExpr(parseExpression());
+        match(TokenType.CLOSE_PAREN);
+        retStmt.addStmt(parseStatement());
+        
+        if (scan.viewNextToken().getType() == TokenType.ELSE) {
+            retStmt.addElsePart(parseStatement());
+        }
+
+        return retStmt;
+    }
+
+    public Statement parseIterationStatement() //8
+    {
+        Statement retStmt = new IterationStatement();
+        match(TokenType.WHILE);
+        match(TokenType.OPEN_PAREN);
+        retStmt.addExpr(parseExpression());
+        match(TokenType.CLOSE_PAREN);
+        retStmt.addStmt(parseStatement());
+        return retStmt;
+    }
+
+    public Statement parseReturnStatement() //9
+    {
+        Statement retStmt = new ReturnStatement();
+        match(TokenType.RETURN);
+        if(scan.viewNextToken().getType()!=TokenType.SEMI)
+            retStmt.addExpr(parseExpression());
+        match(TokenType.SEMI);
+        return retStmt;
+    }
+
+    public Statement parseExpressionStatement() //10
+    {
+        Statement retStmt = new ExpressionStatement();
+        if(scan.viewNextToken().getType()!=TokenType.SEMI)
+            retStmt.addExpr(parseExpression());
+        match(TokenType.SEMI);
+        return retStmt;
+    }
+
+    public Expression parseExpression() //11
+    {
+        if(scan.viewNextToken().getType()==TokenType.ID)
+        {
+            Token id=scan.getNextToken();
+            return parseExpression1(id);
+        }
+        else if(scan.viewNextToken().getType()==TokenType.NUM)
+        {
+            Token num = scan.getNextToken();
+            return parseSimpleExpression1(num);
+        }
+        else if(scan.viewNextToken().getType()==TokenType.OPEN_PAREN)
+        {
+            match(TokenType.OPEN_PAREN);
+            //I think Expression should have a lhs, rhs, and opType as class variables but idk yet
+        }
+    }
+
+    public Expression parseExpression1(Token id) //12
+    {
+        
+    }
+
+    public Expression parseSimpleExpression() //13
     {
         return null;
     }
 
-    public Program parseProgram() //7
-    {
-        return null;
-    }
-
-    public Program parseProgram() //8
-    {
-        return null;
-    }
-
-    public Program parseProgram() //9
-    {
-        return null;
-    }
-
-    public Program parseProgram() //10
-    {
-        return null;
-    }
-
-    public Program parseProgram() //11
-    {
-        return null;
-    }
-
-    public Program parseProgram() //12
-    {
-        return null;
-    }
-
-    public Program parseProgram() //13
-    {
-        return null;
-    }
-
-    public Program parseProgram() //14
+    public Expression parseProgram() //14
     {
         return null;
     }
