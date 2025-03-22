@@ -1,7 +1,7 @@
 package scanner;
 
 public class Token {
-    enum TokenType {
+    public enum TokenType {
         ID,
         ELSE,
         IF,
