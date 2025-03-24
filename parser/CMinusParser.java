@@ -1,6 +1,8 @@
 
+import parser.AssignExpression;
 import parser.CompoundStatement;
 import parser.ReturnStatement;
+import parser.VarExpression;
 import scanner.Token;
 
 package parser;
@@ -120,7 +122,6 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         match(TokenType.OPEN_CURLY);
 
         CompoundStatement retStmt = new CompoundStatement();
-        //while decls addDecl()
         while (scan.viewNextToken().getType() == TokenType.INT) {
             retStmt.addDecl(parseDecl(true));
         }
@@ -215,23 +216,48 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         else if(scan.viewNextToken().getType()==TokenType.OPEN_PAREN)
         {
             match(TokenType.OPEN_PAREN);
+            Expression e = parseExpression();
+            match(TokenType.CLOSE_PAREN);
+
+            return parseSimpleExpression1(e);
+            
             //I think Expression should have a lhs, rhs, and opType as class variables but idk yet
         }
     }
 
     public Expression parseExpression1(Token id) //12
     {
-        
+        if(scan.viewNextToken().getType()==TokenType.EQUALS)
+        {
+            match(TokenType.EQUALS);
+            return new AssignExpression(id, parseExpression());
+        }
+        else if(scan.viewNextToken().getType()==TokenType.OPEN_BRACKET)
+        {
+            //varExpression
+            match(TokenType.OPEN_BRACKET);
+            Expression e = parseExpression();
+            match(TokenType.CLOSE_BRACKET);
+            return parseExpression2(new VarExpression(id, e));
+        }
     }
 
-    public Expression parseSimpleExpression() //13
+    public Expression parseSimpleExpression1(Expression lhs) //13
     {
-        return null;
+        //BinaryExpression
+    }
+    public Expression parseSimpleExpression1(Token lhs) //13
+    {
+        //numexpression
     }
 
-    public Expression parseProgram() //14
+    public Expression parseExpression2(Expression lhs) //14
     {
-        return null;
+        if(scan.viewNextToken().getType()==TokenType.EQUALS)
+        {
+            match(TokenType.EQUALS);
+            return new AssignExpression(lhs, parseExpression());
+        }
     }
 
     public Program parseProgram() //15
