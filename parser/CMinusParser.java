@@ -1,18 +1,11 @@
-
-import parser.AssignExpression;
-import parser.CompoundStatement;
-import parser.ReturnStatement;
-import parser.VarExpression;
-import scanner.Token;
-
 package parser;
 
-import javax.lang.model.util.ElementScanner14;
-
-import scanner.CMinusScanner2;
 import scanner.*;
 
-import scanner.Token.TokenType;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+import javax.lang.model.util.ElementScanner14;
 
 public class CMinusParser implements Parser { //match() is meant to assert that the given token is the same as the current token AND advance the Token pointer
 
@@ -211,7 +204,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         else if(scan.viewNextToken().getType()==TokenType.NUM)
         {
             Token num = scan.getNextToken();
-            return parseSimpleExpression1(num);
+            return parseSimpleExpression1(new NumExpression(num));
         }
         else if(scan.viewNextToken().getType()==TokenType.OPEN_PAREN)
         {
@@ -219,17 +212,15 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             Expression e = parseExpression();
             match(TokenType.CLOSE_PAREN);
 
-            return parseSimpleExpression1(e);
-            
-            //I think Expression should have a lhs, rhs, and opType as class variables but idk yet
+            return parseSimpleExpression1(e);      
         }
     }
 
     public Expression parseExpression1(Token id) //12
     {
-        if(scan.viewNextToken().getType()==TokenType.EQUALS)
+        if(scan.viewNextToken().getType()==TokenType.ASSIGN)
         {
-            match(TokenType.EQUALS);
+            match(TokenType.ASSIGN);
             return new AssignExpression(id, parseExpression());
         }
         else if(scan.viewNextToken().getType()==TokenType.OPEN_BRACKET)
@@ -240,74 +231,172 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             match(TokenType.CLOSE_BRACKET);
             return parseExpression2(new VarExpression(id, e));
         }
+        else if(scan.viewNextToken().getType()==TokenType.OPEN_PAREN)
+        {
+            match(TokenType.OPEN_PAREN);
+            Expression e = new CallExpression(id, parseArgs());
+            match(TokenType.CLOSE_PAREN);
+
+            return parseSimpleExpression1(e);
+
+        }
+        else
+        {
+            return parseSimpleExpression1(new VarExpression(id));
+        }
     }
 
     public Expression parseSimpleExpression1(Expression lhs) //13
     {
-        //BinaryExpression
-    }
-    public Expression parseSimpleExpression1(Token lhs) //13
-    {
         //numexpression
+        Expression newLHS = parseAdditiveExpression1(lhs);
+        
+        if(isRelop(scan.viewNextToken()))
+        {
+            Token opType = scan.getNextToken();
+            Expression rhs = parseAdditiveExpression();
+            return new BinaryExpression(lhs, opType, rhs);
+        }
+        else
+        {
+            return newLHS;
+        }
+
     }
 
     public Expression parseExpression2(Expression lhs) //14
     {
-        if(scan.viewNextToken().getType()==TokenType.EQUALS)
+        if(scan.viewNextToken().getType()==TokenType.ASSIGN)
         {
-            match(TokenType.EQUALS);
+            match(TokenType.ASSIGN);
             return new AssignExpression(lhs, parseExpression());
+        }
+        else
+        {
+            return parseSimpleExpression1(lhs);
         }
     }
 
-    public Program parseProgram() //15
+    public ArrayList<Expression> parseArgs() //15
     {
-        return null;
+        ArrayList<Expression> args = new ArrayList<>();
+        if(scan.viewNextToken().getType()!=TokenType.CLOSE_PAREN)
+        {
+            for(int i = 1; i>0; i--)
+            {
+                args.add(parseExpression);
+                if(scan.viewNextToken().getType()==TokenType.COMMA)
+                {
+                    i++;
+                    match(TokenType.COMMA);
+                }
+                else if(scan.viewNextToken().getType()!=TokenType.CLOSE_PAREN)
+                {
+                    //error non delimited args
+                }
+            }
+
+            return args;
+            
+        }
+
     }
 
-    public Program parseProgram() //16
+    public Expression parseAdditiveExpression1(Expression lhs) //16
     {
-        return null;
+        if(isMulop(scan.viewNextToken().getType()))
+        {
+            return parseTerm1(lhs);
+        }
+        else if(isAddop(scan.viewNextToken()))
+        {
+            Token opType = scan.getNextToken();
+            return new BinaryExpression(lhs, opType, parseTerm());
+        }
+        else{
+            return lhs;
+        }
     }
 
-    public Program parseProgram() //17
+    public Expression parseAdditiveExpression() //17
     {
-        return null;
+
+        Expression lhs = parseTerm();
+        if(isAddop(scan.viewNextToken()))
+        {
+            Token opType = scan.getNextToken();
+            return new BinaryExpression(lhs, opType, parseTerm());
+        }
+        else{
+            return lhs;
+        }
     }
 
-    public Program parseProgram() //18
+    public Expression parseTerm1(Expression lhs) //18
     {
-        return null;
+        Token opType = scan.getNextToken();
+
+        return new BinaryExpression(lhs, opType, parseFactor());
     }
 
-    public Program parseProgram() //19
+    public Expression parseTerm() //19
     {
-        return null;
+        Expression lhs = parseFactor();
+        if(isMulop(scan.viewNextToken()))
+        {
+            Token opType = scan.getNextToken();
+            return new BinaryExpression(lhs, opType, parseFactor());
+        }
+        else{
+            return lhs;
+        }
+
     }
 
-    public Program parseProgram() //20
+    public Expression parseFactor() //20
     {
-        return null;
+        if(scan.viewNextToken().getType() == TokenType.ID)
+        {
+            Token id = scan.getNextToken();
+            return parseVarCall(id);
+        }
+        else if(scan.viewNextToken().getType() == TokenType.NUM)
+        {
+            return new NumExpression(scan.getNextToken());
+        }
+        else if(scan.viewNextToken().getType() == TokenType.OPEN_PAREN)
+        {
+            match(TokenType.OPEN_PAREN);
+            Expression e = parseExpression();
+            match(TokenType.CLOSE_PAREN);
+            return e;
+        }
+        else
+        {
+            return null;//errror
+        }
     }
 
-    public Program parseProgram() //21
+    public Expression parseVarCall(Token id) //21
     {
-        return null;
-    }
-
-    public Program parseProgram() //22
-    {
-        return null;
-    }
-
-    public Program parseProgram() //23
-    {
-        return null;
-    }
-
-    public Program parseProgram() //24
-    {
-        return null;
+        if(scan.viewNextToken().getType() == TokenType.OPEN_BRACKET)
+        {
+            match(TokenType.OPEN_BRACKET);
+            Expression e = parseExpression();
+            match(TokenType.CLOSE_BRACKET);
+            return new VarExpression(id, e);
+        }
+        else if(scan.viewNextToken().getType() == TokenType.OPEN_PAREN)
+        {
+            match(TokenType.OPEN_PAREN);
+            Expression e = parseExpression();
+            match(TokenType.CLOSE_PAREN);
+            return new CallExpression(id, parseArgs()); 
+        }
+        else
+        {
+            return new VarExpression(id);
+        }
     }
 
     public int parseNum() //25
@@ -322,4 +411,25 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             //hold an error for this
         }
     }
+    public boolean isBinOp(Token op)
+    {
+        return isRelop(op)||isAddop(op)||isMulop(op);
+        
+    }
+    public boolean isRelop(Token op)
+    {
+        return op.getType()==TokenType.GOET || op.getType()==TokenType.GT 
+            || op.getType()==TokenType.LOET || op.getType()==TokenType.LT 
+            || op.getType()==TokenType.EQUALS || op.getType()==TokenType.NOTEQUAL;
+    }
+    public boolean isAddop(Token op)
+    {
+        return op.getType()==TokenType.PLUS || op.getType()==TokenType.MINUS;
+    }
+    public boolean isMulop(Token op)
+    {
+        return op.getType()==TokenType.TIMES || op.getType()==TokenType.DIVIDE;  
+    }
+
+
 }
