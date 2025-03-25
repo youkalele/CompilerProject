@@ -17,7 +17,7 @@ public class VarExpression extends Expression {
     }
 
     public void printVarExp(String tabs) {
-        String.out.println(tabs + id);
+        System.out.println(tabs + id);
         indexExpr.printExp(tabs + "\t");
     }
 

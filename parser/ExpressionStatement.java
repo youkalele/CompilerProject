@@ -1,4 +1,5 @@
 package parser;
+
 public class ExpressionStatement extends Statement {
     private Expression expression;
 

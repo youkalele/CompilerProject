@@ -12,8 +12,8 @@ public class Param {
     }
 
     public void printParam(String tabs) {
-        String.out.println(tabs + id);
-        String.out.println(tabs + isArray);
+        System.out.println(tabs + id);
+        System.out.println(tabs + isArray);
     }
 
 }
