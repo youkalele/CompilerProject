@@ -24,7 +24,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
         catch(CMinusParseError e){
             //recover
-            ;
+            //;
             return new Program();
         }
         
