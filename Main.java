@@ -1,0 +1,14 @@
+
+import parser.CMinusParser;
+import parser.Program;
+
+public class Main{
+    public static void main(String [] args)
+    {
+        CMinusParser p = new CMinusParser(args[0]);
+
+        Program output = p.parse();
+
+        output.printProgram();
+    }
+}
