@@ -11,4 +11,8 @@ public class VarDecl extends Declaration{
         id = idToken;
         arrVal = val;
     }
+
+    public void printVarDecl(String tabs) {
+        System.out.println(tabs + arrVal);
+    }
 }

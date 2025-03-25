@@ -29,6 +29,9 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             retProg.addDecl(parseDecl(false));
         }
         //Remember that program REQURES at least ONE decl; throw an error if there are no decls
+        if (retProg.getDecls().isEmpty()) {
+            throw new CMinusParseError("Programs must contain at least one declaration.");
+        }
         return retProg;
 
     }
@@ -44,6 +47,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             retDecl = parseFunDecl1(Token.TokenType.VOID, scan.viewNextToken());
         } else {
             //error
+            throw new CMinusParseError("Invalid Grammar: Invalid Declaration");
         }
 
         return retDecl;
@@ -68,6 +72,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             return parseFunDecl1(Token.TokenType.INT, id);
         } else {
             //error
+            throw new CMinusParseError("Invalid Grammar: Invalid Declaration");
         }
         return null;
     }
@@ -85,7 +90,9 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
                 if(scan.viewNextToken().getType() == Token.TokenType.COMMA)
                     i++;
                 else if(scan.viewNextToken().getType() != Token.TokenType.CLOSE_PAREN)
-                    //error non-delimited params
+                    {//error non-delimited params
+                        throw new CMinusParseError("Invalid Grammar: Non Delimited Parameters");
+                    }
                 
             }
             match(TokenType.CLOSE_PAREN);
@@ -142,7 +149,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             case TokenType.RETURN:
                 return parseReturnStatement();
                 break;
-            default
+            default:
                 return parseExpressionStatement();
                 break;
         }
@@ -293,6 +300,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
                 else if(scan.viewNextToken().getType()!=TokenType.CLOSE_PAREN)
                 {
                     //error non delimited args
+                    throw new CMinusParseError("Invalid grammar: Non Delimited Arguments");
                 }
             }
 
@@ -373,6 +381,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
         else
         {
+            throw new CMinusParseError("Invalid Grammar: Invalid Factor");
             return null;//errror
         }
     }
@@ -408,6 +417,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         if (scan.viewNextToken().getType() == t) {
             scan.getNextToken();
         } else {
+            throw new CMinusParseError("Match Error");
             //hold an error for this
         }
     }

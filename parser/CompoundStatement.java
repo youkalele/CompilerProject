@@ -20,4 +20,13 @@ public class CompoundStatement extends Statement {
     {
         stmts.add(s);
     }
+
+    public void printCompoundStmt(String tabs) {
+        for (Statement statement : stmts) {
+            statement.printStmt(tabs + "\t");
+        }
+        for (Declaration declaration : localDecls) {
+            declaration.printDecl(tabs + "\t");
+        }
+    }
 }

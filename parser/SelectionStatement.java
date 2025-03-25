@@ -21,4 +21,10 @@ public class SelectionStatement extends Statement {
     public void addElsePart(Statement s) {
         elsePart = s;
     }
+
+    public void printSelectionExp(String tabs) {
+        booleanExpression.printExp(tabs + "\t");
+        stmt.printStmt(tabs + "\t");
+        elsePart.printStmt(tabs + "\t");
+    }
 }

@@ -12,4 +12,11 @@ public class CallExpression extends Expression{
         id=idToken;
         args= e;
     }
+
+    public void printCallExp(String tabs) {
+        System.out.println(tabs + "\t" + id);
+        for (Expression exp : args) {
+            exp.printExp(tabs + "\t");
+        }
+    }
 }

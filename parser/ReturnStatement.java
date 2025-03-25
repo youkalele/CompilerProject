@@ -9,4 +9,8 @@ public class ReturnStatement extends Statement {
     {
         returnExpression=e;
     }
+
+    public void printReturnStmt(String tabs) {
+        returnExpression.printExp(tabs + "\t");
+    }
 }

@@ -14,4 +14,9 @@ public class IterationStatement extends Statement {
     public void addStmt(Statement s) {
         stmt = s;
     }
+
+    public void printIterationStmt(String tabs) {
+        booleanExpression.printExp(tabs + "\t");
+        stmt.printStmt(tabs + "\t");
+    }
 }

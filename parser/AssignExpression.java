@@ -15,4 +15,9 @@ public class AssignExpression extends Expression{
         lhs = v;
         rhs =e;
     }
+
+    public void printAssignExp(String tabs) {
+        lhs.printVarExp(tabs + "\t");
+        rhs.printExp(tabs + "\t");
+    }
 }

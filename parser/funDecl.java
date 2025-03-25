@@ -29,4 +29,12 @@ public class funDecl extends Declaration {
     {
         body = c;
     }
+
+    public void printFunDecl(String tabs) {
+        for (Param parameter : params) {
+            parameter.printParam(tabs + "\t");
+        }
+        System.out.println(tabs + isVoid);
+        body.printCompoundStmt(tabs + "\t");
+    }
 }

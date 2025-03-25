@@ -18,4 +18,10 @@ public class BinaryExpression extends Expression{
 
     }
 
+    public void printBinaryExp(String tabs) {
+        lhs.printExp(tabs + "\t");
+        System.out.println(tabs + "\t" + opType);
+        rhs.printExp(tabs + "\t");
+    }
+
 }
