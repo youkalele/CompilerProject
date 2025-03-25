@@ -10,5 +10,9 @@ public class ExpressionStatement extends Statement {
     {
         expression=e;
     }
+
+    public void printExpStmt(String tabs) {
+        expression.printExp(tabs + "\t");
+    }
 }
 
