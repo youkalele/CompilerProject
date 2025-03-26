@@ -19,7 +19,10 @@ public class VarExpression extends Expression {
     public void printExp(String tabs) {
         System.out.print(tabs + id.getData() + " ");
         if (indexExpr != null) {
-            indexExpr.printExp(tabs + "    ");
+            System.out.println("[");
+            indexExpr.printExp(tabs);
+            System.out.println("]");
+
         }
         System.out.println();
     }

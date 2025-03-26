@@ -12,7 +12,7 @@ public class AssignExpression extends Expression{
     }
 
     public void printExp(String tabs) {
-        //System.out.println(tabs + "="); //I forget what an assign expression is
+        System.out.println(tabs + "="); //I forget what an assign expression is
         lhs.printExp(tabs + "    ");
         rhs.printExp(tabs + "    ");
     }

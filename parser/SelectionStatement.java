@@ -28,8 +28,11 @@ public class SelectionStatement extends Statement {
         System.out.println(tabs + ")\n" + tabs + "{");
         stmt.printStmt(tabs + "    ");
         System.out.println(tabs + "}");
-        System.out.println(tabs + "else\n" + tabs + "{");
-        elsePart.printStmt(tabs + "    ");
-        System.out.println(tabs + "}");
+        if(elsePart!=null)
+        {
+            System.out.println(tabs + "else\n" + tabs + "{");
+            elsePart.printStmt(tabs + "    ");
+            System.out.println(tabs + "}");
+        }
     }
 }

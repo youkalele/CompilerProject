@@ -51,9 +51,8 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             scan.getNextToken();
             retDecl = parseDecl1(local); //go to decl'
         } else if (scan.viewNextToken().getType() == Token.TokenType.VOID) {
-            match(TokenType.OPEN_PAREN);
             scan.getNextToken();
-            retDecl = parseFunDecl1(Token.TokenType.VOID, scan.viewNextToken());
+            retDecl = parseFunDecl1(Token.TokenType.VOID, scan.getNextToken());
         } else {
             //error
             throw new CMinusParseError("Invalid Grammar: Invalid Declaration");
@@ -77,7 +76,6 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             match(TokenType.SEMI);
             return new VarDecl(id, arrayVal);//constructor needs to handle either array or not array
         } else if (!local && scan.viewNextToken().getType() == Token.TokenType.OPEN_PAREN) {
-            scan.getNextToken();
             return parseFunDecl1(Token.TokenType.INT, id);
         } else {
             //error
@@ -87,8 +85,10 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     public Declaration parseFunDecl1(Token.TokenType type, Token id) throws CMinusParseError  //3
     {
+        match(TokenType.OPEN_PAREN);
         funDecl retDecl = new funDecl(id, type); //Capitalize this later
         if (scan.viewNextToken().getType() == Token.TokenType.VOID) {
+            scan.getNextToken();
             retDecl.setVoid();
             match(TokenType.CLOSE_PAREN);
         } 
@@ -118,6 +118,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         Token idToken = scan.getNextToken();
         boolean isArr = false;
         if (scan.viewNextToken().getType() == TokenType.OPEN_BRACKET) {
+            scan.getNextToken();
             match(TokenType.CLOSE_BRACKET);
             isArr = true;
         }
@@ -409,7 +410,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     public int parseNum() //25
     {
-        return 0;
+        return Integer.parseInt(scan.getNextToken().getData());
     }
 
     public void match(TokenType t) throws CMinusParseError {

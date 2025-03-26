@@ -13,6 +13,7 @@ public class ExpressionStatement extends Statement {
 
     public void printStmt(String tabs) {
         expression.printExp(tabs);
+        System.out.println(tabs+";");
     }
 }
 

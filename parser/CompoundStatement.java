@@ -22,11 +22,13 @@ public class CompoundStatement extends Statement {
     }
 
     public void printStmt(String tabs) {
-        for (Statement statement : stmts) {
-            statement.printStmt(tabs + "    ");
-        }
+        
         for (Declaration declaration : localDecls) {
             declaration.printDecl(tabs + "    ");
+            System.out.println(tabs + "    ;");
+        }
+        for (Statement statement : stmts) {
+            statement.printStmt(tabs + "    ");
         }
     }
 }

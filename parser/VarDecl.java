@@ -4,7 +4,7 @@ package parser;
 import scanner.Token;
 
 public class VarDecl extends Declaration{
-    private int arrVal;
+    private int arrVal=-1;
 
     public VarDecl(Token idToken, int val)
     {
@@ -15,6 +15,7 @@ public class VarDecl extends Declaration{
     public void printDecl(String tabs) {
         System.out.print(tabs + "int ");
         super.printDecl(tabs);
-        System.out.println(" " + arrVal);
+        if(arrVal!=-1)
+            System.out.println("[" + arrVal + "]");
     }
 }
