@@ -349,10 +349,13 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     public Expression parseTerm1(Expression lhs) throws CMinusParseError  //18
     {
-        
-        Token opType = scan.getNextToken();
-
-        return new BinaryExpression(lhs, opType, parseFactor());
+        Expression newLHS = lhs;
+        while(isMulop(scan.viewNextToken()))
+        {
+            Token opType = scan.getNextToken();
+            newLHS = new BinaryExpression(newLHS, opType, parseFactor());
+        }
+        return newLHS;
     }
 
     public Expression parseTerm() throws CMinusParseError  //19
