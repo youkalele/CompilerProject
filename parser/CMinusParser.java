@@ -13,7 +13,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     public CMinusParser(String file) {
         scan = new CMinusScanner2(file);
-        scan.getNextToken();
+        //scan.getNextToken();
     }
 
     public Program parse() {
@@ -88,20 +88,21 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
     public Declaration parseFunDecl1(Token.TokenType type, Token id) throws CMinusParseError  //3
     {
         funDecl retDecl = new funDecl(id, type); //Capitalize this later
-        if (scan.viewNextToken().getType() != Token.TokenType.VOID) {
+        if (scan.viewNextToken().getType() == Token.TokenType.VOID) {
             retDecl.setVoid();
             match(TokenType.CLOSE_PAREN);
         } 
         else {
             for(int i=1; i>0; i--){
                 retDecl.addParam(parseParam());
-                if(scan.viewNextToken().getType() == Token.TokenType.COMMA)
+                if(scan.viewNextToken().getType() == Token.TokenType.COMMA) {
                     i++;
+                    scan.getNextToken();
+                }
                 else if(scan.viewNextToken().getType() != Token.TokenType.CLOSE_PAREN)
                     {//error non-delimited params
                         throw new CMinusParseError("Invalid Grammar: Non Delimited Parameters");
                     }
-                
             }
             match(TokenType.CLOSE_PAREN);
         }
@@ -168,6 +169,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         retStmt.addStmt(parseStatement());
         
         if (scan.viewNextToken().getType() == TokenType.ELSE) {
+            scan.getNextToken();
             retStmt.addElsePart(parseStatement());
         }
 

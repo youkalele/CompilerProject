@@ -5,7 +5,7 @@ import scanner.Token;
 import scanner.Token.TokenType;
 
 public class funDecl extends Declaration {
-    private ArrayList<Param> params;
+    private ArrayList<Param> params = new ArrayList<Param>();
     private boolean isVoid = false;
     private CompoundStatement body;
 
