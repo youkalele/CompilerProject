@@ -10,7 +10,9 @@ public class ReturnStatement extends Statement {
         returnExpression=e;
     }
 
-    public void printReturnStmt(String tabs) {
-        returnExpression.printExp(tabs + "\t");
+    public void printStmt(String tabs) {
+        System.out.println(tabs + "return");
+        returnExpression.printExp(tabs + "    ");
+        System.out.println(tabs + "    " + ";");
     }
 }

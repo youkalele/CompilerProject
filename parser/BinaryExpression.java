@@ -18,10 +18,46 @@ public class BinaryExpression extends Expression{
 
     }
 
-    public void printBinaryExp(String tabs) {
-        lhs.printExp(tabs + "\t");
-        System.out.println(tabs + "\t" + opType);
-        rhs.printExp(tabs + "\t");
+    public void printExp(String tabs) {
+        String operand;
+        switch (opType.getType().name()) {
+            case "NOTEQUAL":
+                operand = "!=";
+                break;
+            case "EQUALS":
+                operand = "==";
+                break;
+            case "LT":
+                operand = "<";
+                break;
+            case "LOET":
+                operand = "<=";
+                break;
+            case "GT":
+                operand = ">";
+                break;
+            case "GOET":
+                operand = ">=";
+                break;
+            case "PLUS":
+                operand = "+";
+                break;
+            case "MINUS":
+                operand = "-";
+                break;
+            case "TIMES":
+                operand = "*";
+                break;
+            case "DIVIDE":
+                operand = "/";
+                break;
+            default:
+                operand = "ERROR";
+                break;
+        }
+        System.out.println(tabs + operand);
+        lhs.printExp(tabs + "    ");
+        rhs.printExp(tabs + "    ");
     }
 
 }

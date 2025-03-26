@@ -16,9 +16,12 @@ public class VarExpression extends Expression {
         indexExpr=null;
     }
 
-    public void printVarExp(String tabs) {
-        System.out.println(tabs + id);
-        indexExpr.printExp(tabs + "\t");
+    public void printExp(String tabs) {
+        System.out.print(tabs + id.getData() + " ");
+        if (indexExpr != null) {
+            indexExpr.printExp(tabs + "    ");
+        }
+        System.out.println();
     }
 
 }

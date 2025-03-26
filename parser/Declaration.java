@@ -7,6 +7,6 @@ public abstract class Declaration {
 
     public void printDecl(String tabs){
         //print tokentype?
-        System.out.println(tabs + id);
+        System.out.println(tabs + id.getData());
     }
 }

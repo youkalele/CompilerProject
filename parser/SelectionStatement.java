@@ -22,9 +22,14 @@ public class SelectionStatement extends Statement {
         elsePart = s;
     }
 
-    public void printSelectionExp(String tabs) {
-        booleanExpression.printExp(tabs + "\t");
-        stmt.printStmt(tabs + "\t");
-        elsePart.printStmt(tabs + "\t");
+    public void printStmt(String tabs) {
+        System.out.println(tabs + "if\n" + tabs + "(");
+        booleanExpression.printExp(tabs + "    ");
+        System.out.println(tabs + ")\n" + tabs + "{");
+        stmt.printStmt(tabs + "    ");
+        System.out.println(tabs + "}");
+        System.out.println(tabs + "else\n" + tabs + "{");
+        elsePart.printStmt(tabs + "    ");
+        System.out.println(tabs + "}");
     }
 }

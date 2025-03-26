@@ -30,11 +30,17 @@ public class funDecl extends Declaration {
         body = c;
     }
 
-    public void printFunDecl(String tabs) {
-        for (Param parameter : params) {
-            parameter.printParam(tabs + "\t");
+    public void printDecl(String tabs) {
+        System.out.println(isVoid ? "void " : "int ");
+        super.printDecl(tabs);
+        System.out.println("(");
+        for (int i = 0; i < params.size()-1; i++) {
+            params.get(i).printParam(tabs + "    ");
+            System.out.println(",");
         }
-        System.out.println(tabs + isVoid);
-        body.printCompoundStmt(tabs + "\t");
+        params.get(params.size()-1).printParam(tabs + "    ");
+        System.out.println("\n" + tabs + ")\n" + tabs + "{");
+        body.printStmt(tabs + "    ");
+        System.out.println(tabs + "}");
     }
 }

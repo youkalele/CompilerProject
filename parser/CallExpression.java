@@ -13,10 +13,13 @@ public class CallExpression extends Expression{
         args= e;
     }
 
-    public void printCallExp(String tabs) {
-        System.out.println(tabs + "\t" + id);
-        for (Expression exp : args) {
-            exp.printExp(tabs + "\t");
+    public void printExp(String tabs) {
+        System.out.println(tabs + id.getData() + "\n" + tabs + "(");
+        for (int i = 0; i < args.size()-1; i++) {
+            args.get(i).printExp(tabs + "    ");
+            System.out.println(tabs + "    ,");
         }
+        args.get(args.size()-1).printExp(tabs + "    ");
+        System.out.println(tabs + ")");
     }
 }

@@ -3,8 +3,8 @@ package parser;
 import java.util.ArrayList;
 
 public class CompoundStatement extends Statement {
-    private ArrayList<Statement> stmts;
-    private ArrayList<Declaration> localDecls;
+    private ArrayList<Statement> stmts = new ArrayList<Statement>();
+    private ArrayList<Declaration> localDecls = new ArrayList<Declaration>();
 
     public CompoundStatement()
     {
@@ -21,12 +21,12 @@ public class CompoundStatement extends Statement {
         stmts.add(s);
     }
 
-    public void printCompoundStmt(String tabs) {
+    public void printStmt(String tabs) {
         for (Statement statement : stmts) {
-            statement.printStmt(tabs + "\t");
+            statement.printStmt(tabs + "    ");
         }
         for (Declaration declaration : localDecls) {
-            declaration.printDecl(tabs + "\t");
+            declaration.printDecl(tabs + "    ");
         }
     }
 }

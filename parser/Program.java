@@ -3,7 +3,7 @@ package parser;
 import java.util.ArrayList;
 
 public class Program {
-    private ArrayList<Declaration> decls;
+    private ArrayList<Declaration> decls = new ArrayList<Declaration>();
 
     public Program() {
         

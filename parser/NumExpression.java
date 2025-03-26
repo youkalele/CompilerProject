@@ -8,7 +8,7 @@ public class NumExpression extends Expression{
         num=n;
     }
 
-    public void printNumExp(String tabs) {
-        System.out.println(tabs + num);
+    public void printExp(String tabs) {
+        System.out.println(tabs + num.getData());
     }
 }

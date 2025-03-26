@@ -11,8 +11,9 @@ public class AssignExpression extends Expression{
         rhs =e;
     }
 
-    public void printAssignExp(String tabs) {
-        lhs.printVarExp(tabs + "\t");
-        rhs.printExp(tabs + "\t");
+    public void printExp(String tabs) {
+        //System.out.println(tabs + "="); //I forget what an assign expression is
+        lhs.printExp(tabs + "    ");
+        rhs.printExp(tabs + "    ");
     }
 }
