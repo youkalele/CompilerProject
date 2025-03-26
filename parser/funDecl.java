@@ -37,7 +37,7 @@ public class funDecl extends Declaration {
         declString+="(\n";
         for (int i = 0; i < params.size()-1; i++) {
             declString+=params.get(i).printParam(tabs + "    ");
-            declString+=(tabs+",\n");
+            declString+=(tabs + "    ,\n");
         }
         if(params.size()>0)
         {

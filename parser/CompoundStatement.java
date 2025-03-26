@@ -24,11 +24,11 @@ public class CompoundStatement extends Statement {
     public String printStmt(String tabs) {
         String statementString="";
         for (Declaration declaration : localDecls) {
-            statementString+=declaration.printDecl(tabs + "    ");
+            statementString+=declaration.printDecl(tabs);
             statementString+=(tabs + "    ;\n");
         }
         for (Statement statement : stmts) {
-            statementString+=statement.printStmt(tabs + "    ");
+            statementString+=statement.printStmt(tabs);
         }
 
         return statementString;

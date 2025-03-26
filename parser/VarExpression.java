@@ -18,15 +18,13 @@ public class VarExpression extends Expression {
 
     public String printExp(String tabs) {
         String exprString = "";
-        exprString+=(tabs + id.getData() + " ");
+        exprString+=(tabs + id.getData() + "\n");
         if (indexExpr != null) {
             exprString+=(tabs+"[\n");
-            exprString+=indexExpr.printExp(tabs);
+            exprString+=indexExpr.printExp(tabs + "    ");
             exprString+=(tabs+"]\n");
 
         }
-        exprString+="\n";
-
         return exprString;
     }
 
