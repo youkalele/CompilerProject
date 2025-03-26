@@ -12,10 +12,12 @@ public class VarDecl extends Declaration{
         arrVal = val;
     }
 
-    public void printDecl(String tabs) {
-        System.out.print(tabs + "int ");
-        super.printDecl(tabs);
+    public String printDecl(String tabs) {
+        String declString="";
+        declString+=(tabs + "int ");
+        declString+=super.printDecl(tabs);
         if(arrVal!=-1)
-            System.out.println("[" + arrVal + "]");
+            declString+=("[" + arrVal + "]\n");
+        return declString;
     }
 }

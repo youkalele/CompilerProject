@@ -18,7 +18,8 @@ public class BinaryExpression extends Expression{
 
     }
 
-    public void printExp(String tabs) {
+    public String printExp(String tabs) {
+        String exprString="";
         String operand;
         switch (opType.getType().name()) {
             case "NOTEQUAL":
@@ -55,9 +56,11 @@ public class BinaryExpression extends Expression{
                 operand = "ERROR";
                 break;
         }
-        System.out.println(tabs + operand);
-        lhs.printExp(tabs + "    ");
-        rhs.printExp(tabs + "    ");
+        exprString+=(tabs + operand+"\n");
+        exprString+=lhs.printExp(tabs + "    ");
+        exprString+=rhs.printExp(tabs + "    ");
+
+        return exprString;
     }
 
 }

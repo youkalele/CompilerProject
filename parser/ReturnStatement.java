@@ -10,9 +10,11 @@ public class ReturnStatement extends Statement {
         returnExpression=e;
     }
 
-    public void printStmt(String tabs) {
-        System.out.println(tabs + "return");
-        returnExpression.printExp(tabs + "    ");
-        System.out.println(tabs + "    " + ";");
+    public String printStmt(String tabs) {
+        String statementString = "";
+        statementString+=(tabs + "return\n");
+        statementString+=returnExpression.printExp(tabs + "    ");
+        statementString+=(tabs + "    " + ";\n");
+        return statementString;
     }
 }

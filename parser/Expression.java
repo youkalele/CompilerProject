@@ -2,7 +2,7 @@ package parser;
 public abstract class Expression {
 
     
-    public void printExp(String tabs) {
-
+    public String printExp(String tabs) {
+        return "";
     }
 }

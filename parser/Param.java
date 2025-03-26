@@ -11,9 +11,8 @@ public class Param {
         isArray=arrQ;
     }
 
-    public void printParam(String tabs) {
-        System.out.print(tabs + id.getData());
-        //System.out.print(tabs + "int " + id.getData());
+    public String printParam(String tabs) {
+        return (tabs + "int " + id.getData())+"\n";
     }
 
 }

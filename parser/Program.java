@@ -18,12 +18,15 @@ public class Program {
         return decls;
     }
 
-    public void printProgram() {
+    public String printProgram() {
         //shouldn't have an empty program if the parser caught it right
         //which it should have
+        String declListString ="";
         for (Declaration declaration : decls) {
-            declaration.printDecl("");
+            declListString+=declaration.printDecl("");
+            declListString+="\n";
         }
+        return declListString;
     }
     
 

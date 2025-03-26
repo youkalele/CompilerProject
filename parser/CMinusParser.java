@@ -19,21 +19,20 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     public Program parse() {
 
-        Program retProg= parseProgram();
-        if(errors.isEmpty())
+        try{
+            Program retProg= parseProgram();
+
             return retProg;
-        else
+        }
+        catch(CMinusParseError e)
         {
-            for(int i = 0; i<errors.size(); i++)
-            {
-                System.out.println(i+": "+errors.get(i).getMessage());
-            }
+            System.err.println(e.getMessage());
             return null;
         }
         
     }
 
-    public Program parseProgram() //1
+    public Program parseProgram() throws CMinusParseError//1
     {
         Program retProg = new Program();
         //get first token
@@ -42,13 +41,13 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
         //Remember that program REQURES at least ONE decl; throw an error if there are no decls
         if (retProg.getDecls().isEmpty()) {
-            errors.add(new CMinusParseError("Programs must contain at least one declaration."));
+            throw new CMinusParseError("Programs must contain at least one declaration.");
         }
         return retProg;
 
     }
 
-    public Declaration parseDecl(boolean local)  {
+    public Declaration parseDecl(boolean local)   throws CMinusParseError{
         Declaration retDecl = null;
         if (scan.viewNextToken().getType() == Token.TokenType.INT) {
             scan.getNextToken();
@@ -58,16 +57,13 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             retDecl = parseFunDecl1(Token.TokenType.VOID, scan.getNextToken());
         } else {
             //error
-            errors.add(new CMinusParseError("Invalid Grammar: Invalid Declaration Type"));
-            scan.getNextToken();
-            retDecl=parseDecl1(local);
-
+            throw new CMinusParseError("Invalid Grammar: Invalid Declaration Type");
         }
 
         return retDecl;
     }
 
-    public Declaration parseDecl1(boolean local)   //2
+    public Declaration parseDecl1(boolean local)    throws CMinusParseError//2
     {
         Token id = scan.getNextToken();
         //descend into madness
@@ -85,13 +81,12 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
             return parseFunDecl1(Token.TokenType.INT, id);
         } else {
             //error
-            errors.add(new CMinusParseError("Invalid Grammar: Invalid Declaration"));
-            scan.getNextToken();
-            return new VarDecl(id, -1);
+            throw new CMinusParseError("Invalid Grammar: Invalid Declaration");
+
         }
     }
 
-    public Declaration parseFunDecl1(Token.TokenType type, Token id)   //3
+    public Declaration parseFunDecl1(Token.TokenType type, Token id)  throws CMinusParseError  //3
     {
         match(TokenType.OPEN_PAREN);
         funDecl retDecl = new funDecl(id, type); //Capitalize this later
@@ -109,8 +104,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
                 }
                 else if(scan.viewNextToken().getType() != Token.TokenType.CLOSE_PAREN)
                     {//error non-delimited params
-                        errors.add(new CMinusParseError("Invalid Grammar: Non Delimited Parameters"));
-                        i++;
+                        throw new CMinusParseError("Invalid Grammar: Non Delimited Parameters");
                     }
             }
             match(TokenType.CLOSE_PAREN);
@@ -121,7 +115,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return retDecl;
     }
 
-    public Param parseParam()  //4
+    public Param parseParam()  throws CMinusParseError //4
     {
         match(TokenType.INT);
         Token idToken = scan.getNextToken();
@@ -136,7 +130,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     }
 
-    public CompoundStatement parseCompoundStatement()  //5
+    public CompoundStatement parseCompoundStatement()  throws CMinusParseError //5
     {
         match(TokenType.OPEN_CURLY);
 
@@ -149,13 +143,13 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
         }
         if(scan.viewNextToken().getType()==TokenType.EOF)
-            errors.add(new CMinusParseError("File terminated before end of block"));
+            throw new CMinusParseError("File terminated before end of block");
         match(TokenType.CLOSE_CURLY);
 
         return retStmt;
     }
 
-    public Statement parseStatement() //6
+    public Statement parseStatement()  throws CMinusParseError//6
     {
         switch (scan.viewNextToken().getType()) {
             case OPEN_CURLY:
@@ -171,7 +165,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
     }
 
-    public Statement parseSelectionStatement()  //7
+    public Statement parseSelectionStatement()  throws CMinusParseError  //7
     {
         SelectionStatement retStmt = new SelectionStatement();
         match(TokenType.IF);
@@ -188,7 +182,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return retStmt;
     }
 
-    public Statement parseIterationStatement()  //8
+    public Statement parseIterationStatement()  throws CMinusParseError //8
     {
         IterationStatement retStmt = new IterationStatement();
         match(TokenType.WHILE);
@@ -199,7 +193,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return retStmt;
     }
 
-    public Statement parseReturnStatement()  //9
+    public Statement parseReturnStatement()  throws CMinusParseError //9
     {
         ReturnStatement retStmt = new ReturnStatement();
         match(TokenType.RETURN);
@@ -209,7 +203,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return retStmt;
     }
 
-    public Statement parseExpressionStatement()  //10
+    public Statement parseExpressionStatement()  throws CMinusParseError //10
     {
         ExpressionStatement retStmt = new ExpressionStatement();
         if(scan.viewNextToken().getType()!=TokenType.SEMI)
@@ -218,7 +212,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return retStmt;
     }
 
-    public Expression parseExpression()  //11
+    public Expression parseExpression()  throws CMinusParseError //11
     {
         if(scan.viewNextToken().getType()==TokenType.ID)
         {
@@ -241,7 +235,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return null;
     }
 
-    public Expression parseExpression1(Token id)  //12
+    public Expression parseExpression1(Token id)  throws CMinusParseError //12
     {
         if(scan.viewNextToken().getType()==TokenType.ASSIGN)
         {
@@ -271,7 +265,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
     }
 
-    public Expression parseSimpleExpression1(Expression lhs)   //13
+    public Expression parseSimpleExpression1(Expression lhs)  throws CMinusParseError  //13
     {
         //numexpression
         Expression newLHS = parseAdditiveExpression1(lhs);
@@ -289,7 +283,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     }
 
-    public Expression parseExpression2(VarExpression lhs)  //14
+    public Expression parseExpression2(VarExpression lhs)  throws CMinusParseError //14
     {
         if(scan.viewNextToken().getType()==TokenType.ASSIGN)
         {
@@ -302,7 +296,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
     }
 
-    public ArrayList<Expression> parseArgs()  //15
+    public ArrayList<Expression> parseArgs()  throws CMinusParseError //15
     {
         ArrayList<Expression> args = new ArrayList<>();
         if(scan.viewNextToken().getType()!=TokenType.CLOSE_PAREN)
@@ -318,8 +312,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
                 else if(scan.viewNextToken().getType()!=TokenType.CLOSE_PAREN)
                 {
                     //error non delimited args
-                    errors.add(new CMinusParseError("Invalid grammar: Non Delimited Arguments"));
-                    i++;
+                    throw new CMinusParseError("Invalid grammar: Non Delimited Arguments");
                 }
             }
 
@@ -330,7 +323,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     }
 
-    public Expression parseAdditiveExpression1(Expression lhs)   //16
+    public Expression parseAdditiveExpression1(Expression lhs)  throws CMinusParseError  //16
     {
        
         Expression newLHS = parseTerm1(lhs);
@@ -343,7 +336,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
          return newLHS;
     }
 
-    public Expression parseAdditiveExpression()  //17
+    public Expression parseAdditiveExpression()  throws CMinusParseError  //17
     {
         Expression newLHS = parseTerm();
         while(isAddop(scan.viewNextToken()))
@@ -354,7 +347,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return newLHS;
     }
 
-    public Expression parseTerm1(Expression lhs)   //18
+    public Expression parseTerm1(Expression lhs)   throws CMinusParseError //18
     {
         Expression newLHS = lhs;
         while(isMulop(scan.viewNextToken()))
@@ -365,7 +358,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return newLHS;
     }
 
-    public Expression parseTerm()   //19
+    public Expression parseTerm()  throws CMinusParseError  //19
     { 
         Expression lhs = parseFactor(); //parseFactor returns an Expression
         while(isMulop(scan.viewNextToken())) {
@@ -374,7 +367,7 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return lhs;
     }
 
-    public Expression parseFactor()  //20
+    public Expression parseFactor()  throws CMinusParseError //20
     {
         if(scan.viewNextToken().getType() == TokenType.ID)
         {
@@ -394,12 +387,11 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         }
         else
         {
-            errors.add(new CMinusParseError("Invalid Grammar: Invalid Factor"));
-            return new NumExpression(scan.getNextToken());
+            throw new CMinusParseError("Invalid Grammar: Invalid Factor");
         }
     }
 
-    public Expression parseVarCall(Token id)  //21
+    public Expression parseVarCall(Token id)  throws CMinusParseError //21
     {
         if(scan.viewNextToken().getType() == TokenType.OPEN_BRACKET)
         {
@@ -426,11 +418,11 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
         return Integer.parseInt(scan.getNextToken().getData());
     }
 
-    public void match(TokenType t)  {
+    public void match(TokenType t)  throws CMinusParseError  {
         if (scan.viewNextToken().getType() == t) {
             scan.getNextToken();
         } else {
-            errors.add(new CMinusParseError("Match Error: expected "+t.name()));
+            throw new CMinusParseError("Match Error: expected "+t.name());
         }
     }
 

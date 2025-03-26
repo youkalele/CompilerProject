@@ -1,7 +1,7 @@
 
 import parser.CMinusParser;
 import parser.Program;
-
+import java.lang.String;
 public class Main{
     public static void main(String [] args)
     {
@@ -10,6 +10,9 @@ public class Main{
 
         Program output = p.parse();
         if(output!=null)
-            output.printProgram();
+        {
+            String s= output.printProgram();
+            System.out.println(s);
+        }
     }
 }

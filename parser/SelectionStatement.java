@@ -22,17 +22,20 @@ public class SelectionStatement extends Statement {
         elsePart = s;
     }
 
-    public void printStmt(String tabs) {
-        System.out.println(tabs + "if\n" + tabs + "(");
-        booleanExpression.printExp(tabs + "    ");
-        System.out.println(tabs + ")\n" + tabs + "{");
-        stmt.printStmt(tabs + "    ");
-        System.out.println(tabs + "}");
+    public String printStmt(String tabs) {
+        String statementString = "";
+        statementString+=(tabs + "if\n" + tabs + "(\n");
+        statementString+=booleanExpression.printExp(tabs + "    ");
+        statementString+=(tabs + ")\n" + tabs + "{\n");
+        statementString+=stmt.printStmt(tabs + "    ");
+        statementString+=(tabs + "}\n");
         if(elsePart!=null)
         {
-            System.out.println(tabs + "else\n" + tabs + "{");
-            elsePart.printStmt(tabs + "    ");
-            System.out.println(tabs + "}");
+            statementString+=(tabs + "else\n" + tabs + "{\n");
+            statementString+=elsePart.printStmt(tabs + "    ");
+            statementString+=(tabs + "}\n");
         }
+
+        return statementString;
     }
 }

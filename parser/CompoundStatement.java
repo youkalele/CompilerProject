@@ -21,14 +21,16 @@ public class CompoundStatement extends Statement {
         stmts.add(s);
     }
 
-    public void printStmt(String tabs) {
-        
+    public String printStmt(String tabs) {
+        String statementString="";
         for (Declaration declaration : localDecls) {
-            declaration.printDecl(tabs + "    ");
-            System.out.println(tabs + "    ;");
+            statementString+=declaration.printDecl(tabs + "    ");
+            statementString+=(tabs + "    ;\n");
         }
         for (Statement statement : stmts) {
-            statement.printStmt(tabs + "    ");
+            statementString+=statement.printStmt(tabs + "    ");
         }
+
+        return statementString;
     }
 }

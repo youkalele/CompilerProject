@@ -30,21 +30,23 @@ public class funDecl extends Declaration {
         body = c;
     }
 
-    public void printDecl(String tabs) {
-        System.out.print(isVoid ? "void " : "int ");
-        super.printDecl(tabs);
-        System.out.println("(");
+    public String printDecl(String tabs) {
+        String declString = "";
+        declString+=(isVoid ? "void " : "int ");
+        declString+=super.printDecl(tabs);
+        declString+="(\n";
         for (int i = 0; i < params.size()-1; i++) {
-            params.get(i).printParam(tabs + "    ");
-            System.out.println(",");
+            declString+=params.get(i).printParam(tabs + "    ");
+            declString+=(tabs+",\n");
         }
         if(params.size()>0)
         {
-            params.get(params.size()-1).printParam(tabs + "    ");
-            System.out.println("\n" + tabs + ")\n" + tabs + "{");
+            declString+=params.get(params.size()-1).printParam(tabs + "    ");
         }
-        System.out.println("\n" + tabs + ")\n" + tabs + "{");
-        body.printStmt(tabs + "    ");
-        System.out.println(tabs + "}");
+        declString+=(tabs + ")\n" + tabs + "{\n");
+        declString+=body.printStmt(tabs + "    ");
+        declString+=(tabs + "}\n");
+
+        return declString;
     }
 }

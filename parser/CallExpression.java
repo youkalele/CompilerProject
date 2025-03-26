@@ -13,20 +13,24 @@ public class CallExpression extends Expression{
         args= e;
     }
 
-    public void printExp(String tabs) {
-        System.out.println(tabs + id.getData() + "\n" + tabs + "(");
+    public String printExp(String tabs) {
+        String exprString = "";
+        exprString+=(tabs + id.getData() + "\n" + tabs + "(\n");
         if(args!=null){
             for (int i = 0; i < args.size()-1; i++) {
-                args.get(i).printExp(tabs + "    ");
-                System.out.println(tabs + "    ,");
+                exprString+=args.get(i).printExp(tabs + "    ");
+                exprString+=(tabs + "    ,\n");
             }
             if(args.size()>0)
             {
-                args.get(args.size()-1).printExp(tabs + "    ");
+                exprString+=args.get(args.size()-1).printExp(tabs + "    ");
                 
             }
         }
         
-        System.out.println(tabs + ")");
+        exprString+=(tabs + ")\n");
+
+
+        return exprString;
     }
 }

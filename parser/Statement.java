@@ -2,8 +2,8 @@ package parser;
 
 public abstract class Statement {
 
-    public void printStmt(String tabs) {
-        
+    public String printStmt(String tabs) {
+        return "";
     }
     
 }

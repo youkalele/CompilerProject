@@ -11,9 +11,11 @@ public class ExpressionStatement extends Statement {
         expression=e;
     }
 
-    public void printStmt(String tabs) {
-        expression.printExp(tabs);
-        System.out.println(tabs+";");
+    public String printStmt(String tabs) {
+        String statementString = "";
+        statementString+=expression.printExp(tabs);
+        statementString+=(tabs+";\n");
+        return statementString;
     }
 }
 
