@@ -9,7 +9,7 @@ public class Main{
         //CMinusParser p = new CMinusParser("CompilerProject/scanner/sampleBookTest.c-");
 
         Program output = p.parse();
-
-        output.printProgram();
+        if(output!=null)
+            output.printProgram();
     }
 }
