@@ -319,32 +319,26 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
 
     public Expression parseAdditiveExpression1(Expression lhs) throws CMinusParseError  //16
     {
-        if(isMulop(scan.viewNextToken()))
-        {
-            return parseTerm1(lhs);
-        }
-        else if(isAddop(scan.viewNextToken()))
+       
+        Expression newLHS = parseTerm1(lhs);
+
+        while(isAddop(scan.viewNextToken()))
         {
             Token opType = scan.getNextToken();
-            return new BinaryExpression(lhs, opType, parseTerm());
+            newLHS= new BinaryExpression(newLHS, opType, parseTerm());
         }
-        else{
-            return lhs;
-        }
+         return newLHS;
     }
 
     public Expression parseAdditiveExpression() throws CMinusParseError //17
     {
-
-        Expression lhs = parseTerm();
-        if(isAddop(scan.viewNextToken()))
+        Expression newLHS = parseTerm();
+        while(isAddop(scan.viewNextToken()))
         {
             Token opType = scan.getNextToken();
-            return new BinaryExpression(lhs, opType, parseTerm());
+            newLHS = new BinaryExpression(newLHS, opType, parseTerm());
         }
-        else{
-            return lhs;
-        }
+        return newLHS;
     }
 
     public Expression parseTerm1(Expression lhs) throws CMinusParseError  //18
@@ -359,31 +353,12 @@ public class CMinusParser implements Parser { //match() is meant to assert that 
     }
 
     public Expression parseTerm() throws CMinusParseError  //19
-    {
-        Expression retStmt;
-        retStmt = new BinaryExpression(parseFactor(), null, null);
+    { 
+        Expression lhs = parseFactor(); //parseFactor returns an Expression
         while(isMulop(scan.viewNextToken())) {
-            retStmt = new BinaryExpression(retStmt, scan.getNextToken(), parseFactor());
+            lhs = new BinaryExpression(lhs, scan.getNextToken(), parseFactor());
         }
-        /*
-        for(int i = 1; i>0; i--)
-        {
-            Expression lhs = parseFactor();
-            if(isMulop(scan.viewNextToken()))
-            {
-                i++;
-                Token opType = scan.getNextToken();
-                return new BinaryExpression(lhs, opType, parseFactor());
-            }
-        }
-        //*/
-        return retStmt;
-        /*
-        else{
-            return lhs;
-        }
-        //*/
-
+        return lhs;
     }
 
     public Expression parseFactor() throws CMinusParseError //20
