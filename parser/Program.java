@@ -1,6 +1,7 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.*;
 
 public class Program {
     private ArrayList<Declaration> decls = new ArrayList<Declaration>();
@@ -27,6 +28,22 @@ public class Program {
             declListString+="\n";
         }
         return declListString;
+    }
+
+    public CodeItem genLLcode()
+    {
+        
+        CodeItem head = decls[0].genLLcode();
+        CodeItem prevDecl = head;
+        for(int i = 1; i<decls.size()-1; i++)
+        {
+            CodeItem declItem = decls[i].genLLcode();
+            declItem
+            prevDecl=declItem;
+        }
+
+
+        return ;
     }
     
 

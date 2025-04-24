@@ -19,7 +19,7 @@ public class CMinusCompiler implements Compiler {
 
            CodeItem head = ast.genLLcode(); //FIXME starting at program and going down the tree: returns the head of the linked list
 
-        } catch (IOException ioe) {
+        } catch (Exception ioe) {
 
         }
 
