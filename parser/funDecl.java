@@ -1,6 +1,6 @@
 package parser;
 import java.util.ArrayList;
-
+import lowlevel.*;
 import scanner.Token;
 import scanner.Token.TokenType;
 
@@ -48,5 +48,39 @@ public class funDecl extends Declaration {
         declString+=(tabs + "}\n");
 
         return declString;
+    }
+
+    public CodeItem genLLcode()
+    {
+
+        Function func = new Function(isVoid ? 0 : 1, id.getData());
+        if(!params.isEmpty())
+        {
+            FuncParam head = new FuncParam(1, params.get(0).getId().getData(), params.get(0).isArray());
+
+            FuncParam prevParam = head;
+            for(int i = 1; i<params.size(); i++)
+            {
+                FuncParam p = new FuncParam(1, params.get(i).getId().getData(), params.get(i).isArray());
+                func.getTable().put(func.getNewRegNum(), params.get(i).getId().getData());
+
+                prevParam.setNextParam(p);
+                prevParam = p;
+            }
+            func.setFirstParam(head);
+        }
+
+        func.createBlock0();
+        BasicBlock block = new BasicBlock(func);
+        func.appendBlock(block);
+        func.setCurrBlock(block);
+        body.genLLcode(func); //all statemtns and expressions are like this
+        func.appendBlock(func.getReturnBlock());
+
+        if(func.getFirstUnconnectedBlock()!=null)
+        {
+            func.appendBlock(func.getFirstUnconnectedBlock()); //FIXME
+        }
+
     }
 }

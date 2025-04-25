@@ -33,17 +33,17 @@ public class Program {
     public CodeItem genLLcode()
     {
         
-        CodeItem head = decls[0].genLLcode();
+        CodeItem head = decls.get(0).genLLcode();
         CodeItem prevDecl = head;
         for(int i = 1; i<decls.size()-1; i++)
         {
-            CodeItem declItem = decls[i].genLLcode();
-            declItem
+            CodeItem declItem = decls.get(i).genLLcode();
+            prevDecl.setNextItem(declItem);
             prevDecl=declItem;
         }
 
 
-        return ;
+        return head;
     }
     
 

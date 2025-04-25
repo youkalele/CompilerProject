@@ -14,5 +14,12 @@ public class Param {
     public String printParam(String tabs) {
         return (tabs + "int " + id.getData())+"\n";
     }
-
+    public Token getId()
+    {
+        return id;
+    }
+    public boolean isArray()
+    {
+        return isArray;
+    }
 }
