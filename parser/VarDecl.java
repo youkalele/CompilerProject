@@ -2,6 +2,7 @@
 package parser;
 
 import scanner.Token;
+import lowlevel.*;
 
 public class VarDecl extends Declaration{
     private int arrVal=-1;
@@ -19,5 +20,11 @@ public class VarDecl extends Declaration{
         if(arrVal!=-1)
             declString+=("[" + arrVal + "]\n");
         return declString;
+    }
+
+    //should have 2 versions
+    public CodeItem genLLCode() {
+        Data data = new Data(); //generate new Data
+        //link to other CodeItems in list
     }
 }

@@ -1,5 +1,7 @@
 package parser;
 
+import lowlevel.*;
+
 public class ExpressionStatement extends Statement {
     private Expression expression;
 
@@ -16,6 +18,11 @@ public class ExpressionStatement extends Statement {
         statementString+=expression.printExp(tabs);
         statementString+=(tabs+";\n");
         return statementString;
+    }
+
+    public CodeItem genLLCode() {
+        //Just call genCode on the Expr and do nothing else
+        expression.genLLCode();
     }
 }
 

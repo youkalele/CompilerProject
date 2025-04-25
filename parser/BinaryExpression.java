@@ -1,6 +1,7 @@
 package parser;
 
 import scanner.Token;
+import lowlevel.*;
 
 public class BinaryExpression extends Expression{
     private Expression lhs;
@@ -63,4 +64,12 @@ public class BinaryExpression extends Expression{
         return exprString;
     }
 
+    public CodeItem genLLCode() {
+        //call genCode on left and right child
+        lhs.genLLCode();
+        rhs.genLLCode();
+        //get location of where children stored their results
+        //get a new register for your result
+        //add Operation to do your function
+    }
 }

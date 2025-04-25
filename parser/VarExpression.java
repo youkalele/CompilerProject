@@ -1,5 +1,6 @@
 package parser;
 import scanner.Token;
+import lowlevel.*;
 
 public class VarExpression extends Expression {
     private Token id;
@@ -28,4 +29,10 @@ public class VarExpression extends Expression {
         return exprString;
     }
 
+    public CodeItem genLLCode() {
+        //Just look up your location in the symbol table (if not already done in previous pass)
+
+        //If global, create a load oper
+        
+    }
 }

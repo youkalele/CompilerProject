@@ -1,7 +1,9 @@
 package parser;
 import java.util.ArrayList;
 
+import DrG code.lowlevel.CodeItem;
 import scanner.Token;
+import lowlevel.*;
 
 public class CallExpression extends Expression{
     private Token id;
@@ -32,5 +34,18 @@ public class CallExpression extends Expression{
 
 
         return exprString;
+    }
+
+    public CodeItem genLLCode() {
+        //a bit more complicated
+        //call genCode on params to generate code for them (order doesn't matter because we're doing x64)
+        //add operation to move each param to register or memory
+        //add call operation
+        //May want to add a Macro Operation for PostCall
+        //  Or let a later pass just handle this
+        //  For project, you will annotate Call with param size
+        //Need to move return register into regular register
+        //And annotate the Call node with this register
+        //  What about saving registers, ala caller-save convention?
     }
 }
