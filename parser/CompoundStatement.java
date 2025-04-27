@@ -39,7 +39,7 @@ public class CompoundStatement extends Statement {
     {
         for(Declaration d : localDecls)
         { 
-            
+            func.getTable().put(d.id.getData(), func.getNewRegNum());
             
         }
         for(Statement s : stmts)

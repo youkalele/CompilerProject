@@ -1,6 +1,10 @@
 package parser;
 
-import lowlevel.*;
+import lowlevel.BasicBlock;
+import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
+import lowlevel.Operation.OperationType;
 
 public class SelectionStatement extends Statement {
 
@@ -43,6 +47,41 @@ public class SelectionStatement extends Statement {
 
     public void genLLcode(Function func)
     {
-        
+        BasicBlock thenBlock = new BasicBlock(func);
+        BasicBlock postBlock = new BasicBlock(func);
+        BasicBlock elseBlock = null;
+
+        if(elsePart!=null)
+        {
+            elseBlock = new BasicBlock(func);
+        }
+
+
+        booleanExpression.genLLcode(func);
+
+        Operation branch = new Operation(Operation.OperationType.BEQ, func.getCurrBlock());
+
+        Operand expr = new Operand(Operand.OperandType.REGISTER);
+        Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
+        Operand elseOperand = new Operand(Operand.OperandType.BLOCK, elseBlock);
+        branch.setSrcOperand(0, expr);
+        branch.setSrcOperand(1, zero);
+        branch.setSrcOperand(2, elseOperand);
+
+        func.appendToCurrentBlock(thenBlock);
+        func.setCurrBlock(thenBlock);
+        stmt.genLLcode(func);
+
+        func.appendToCurrentBlock(postBlock);
+        func.setCurrBlock(elseBlock);
+        elsePart.genLLcode(func);
+
+        Operation jump = new Operation(OperationType.JMP, func.getCurrBlock());
+        Operand postOperand = new Operand(Operand.OperandType.BLOCK, elseBlock);
+        jump.setSrcOperand(0, postOperand);
+        elseBlock.appendOper(jump);
+        func.appendUnconnectedBlock(elseBlock);
+
+        func.setCurrBlock(postBlock);
     }
 }
