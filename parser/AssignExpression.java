@@ -1,4 +1,6 @@
 package parser;
+
+import lowlevel.*;
 public class AssignExpression extends Expression{
     
     private VarExpression lhs;
@@ -17,5 +19,10 @@ public class AssignExpression extends Expression{
         exprString+=lhs.printExp(tabs + "    ");
         exprString+=rhs.printExp(tabs + "    ");
         return exprString;
+    }
+
+    public void genLLcode(Function func)
+    {
+        
     }
 }

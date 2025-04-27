@@ -1,4 +1,8 @@
 package parser;
+
+import java.beans.Expression;
+import lowlevel.*;
+
 public class IterationStatement extends Statement {
     private Expression booleanExpression;
     private Statement stmt;
@@ -22,5 +26,10 @@ public class IterationStatement extends Statement {
         statementString+=stmt.printStmt(tabs + "    ");
         statementString+=tabs+"}\n";
         return statementString;
+    }
+
+    public void genLLcode(Function func)
+    {
+        
     }
 }

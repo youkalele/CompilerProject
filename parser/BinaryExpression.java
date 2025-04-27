@@ -64,10 +64,10 @@ public class BinaryExpression extends Expression{
         return exprString;
     }
 
-    public CodeItem genLLCode() {
+    public void genLLcode(Function func) {
         //call genCode on left and right child
-        lhs.genLLCode();
-        rhs.genLLCode();
+        lhs.genLLcode(func);
+        rhs.genLLcode(func);
         //get location of where children stored their results
         //get a new register for your result
         //add Operation to do your function

@@ -20,9 +20,9 @@ public class ExpressionStatement extends Statement {
         return statementString;
     }
 
-    public CodeItem genLLCode() {
+    public void genLLcode(Function func) {
         //Just call genCode on the Expr and do nothing else
-        expression.genLLCode();
+        
     }
 }
 

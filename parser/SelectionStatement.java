@@ -1,5 +1,7 @@
 package parser;
 
+import lowlevel.*;
+
 public class SelectionStatement extends Statement {
 
     private Expression booleanExpression;
@@ -37,5 +39,10 @@ public class SelectionStatement extends Statement {
         }
 
         return statementString;
+    }
+
+    public void genLLcode(Function func)
+    {
+        
     }
 }

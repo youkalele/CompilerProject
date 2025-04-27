@@ -1,5 +1,6 @@
 package parser;
 
+import lowlevel.*;
 import java.util.ArrayList;
 
 public class CompoundStatement extends Statement {
@@ -32,5 +33,18 @@ public class CompoundStatement extends Statement {
         }
 
         return statementString;
+    }
+
+    public void genLLcode(Function func)
+    {
+        for(Declaration d : localDecls)
+        { 
+            
+            
+        }
+        for(Statement s : stmts)
+        {
+            s.genLLcode(func);
+        }
     }
 }

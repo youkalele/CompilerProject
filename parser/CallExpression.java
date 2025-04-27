@@ -36,7 +36,7 @@ public class CallExpression extends Expression{
         return exprString;
     }
 
-    public CodeItem genLLCode() {
+    public void genLLcode(Function func) {
         //a bit more complicated
         //call genCode on params to generate code for them (order doesn't matter because we're doing x64)
         //add operation to move each param to register or memory

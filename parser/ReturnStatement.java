@@ -1,4 +1,7 @@
 package parser;
+
+import lowlevel.*;
+
 public class ReturnStatement extends Statement {
     private Expression returnExpression;
 
@@ -16,5 +19,10 @@ public class ReturnStatement extends Statement {
         statementString+=returnExpression.printExp(tabs + "    ");
         statementString+=(tabs + "    " + ";\n");
         return statementString;
+    }
+
+    public void genLLcode(Function func)
+    {
+        
     }
 }
