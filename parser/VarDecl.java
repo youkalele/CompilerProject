@@ -1,8 +1,10 @@
 
 package parser;
 
+import compiler.CMinusCompiler;
+import lowlevel.CodeItem;
+import lowlevel.Data;
 import scanner.Token;
-import lowlevel.*;
 
 public class VarDecl extends Declaration{
     private int arrVal=-1;
@@ -26,10 +28,12 @@ public class VarDecl extends Declaration{
     public CodeItem genLLCode() {
         Data decl;
         if(arrVal==-1)
-            data = new Data(Data.TYPE_INT, id.getData());
+            decl = new Data(Data.TYPE_INT, id.getData());
         else
-            data = new Data(Data.TYPE_INT, id.getData(), true, arrVal);
-
+            decl = new Data(Data.TYPE_INT, id.getData(), true, arrVal);
+        
+        CMinusCompiler.globalHash.put(decl.getName().hashCode(), decl.getName());
+        
         return decl;
         
         //generate new Data
