@@ -2,6 +2,7 @@ package parser;
 
 import java.beans.Expression;
 import lowlevel.*;
+import lowlevel.Operation.OperationType;
 
 public class IterationStatement extends Statement {
     private Expression booleanExpression;
@@ -30,6 +31,39 @@ public class IterationStatement extends Statement {
 
     public void genLLcode(Function func)
     {
+        BasicBlock thenBlock = new BasicBlock(func);
+        BasicBlock postBlock = new BasicBlock(func);
+
+        booleanExpression.genLLcode(func); //which register does this result to?
         
+        Operand expr = new Operand(Operand.OperandType.REGISTER, booleanExpression.getRegNum()); // set this to the return of the expression
+        Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
+        Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock);
+        Operand thenOperand = new Operand(Operand.OperandType.BLOCK, thenBlock);
+
+        //branch to post if condition is false
+        Operation beq = new Operation(Operation.OperationType.BEQ, func.getCurrBlock());
+        beq.setSrcOperand(0, expr);
+        beq.setSrcOperand(1, zero);
+        beq.setSrcOperand(2, postOperand);
+        func.getCurrBlock().appendOper(beq);
+
+        //move to then block
+        func.appendToCurrentBlock(thenBlock);
+        func.setCurrBlock(thenBlock);
+
+        stmt.genLLcode(func);
+
+        //go back to the beginning of thenBLock if the condition is not false
+        Operation bne = new Operation(OperationType.BNE, func.getCurrBlock());
+        bne.setSrcOperand(0, expr);
+        bne.setSrcOperand(1, zero);
+        bne.setSrcOperand(2, thenOperand);
+        thenBlock.appendOper(bne);
+
+
+        //move to post block
+        func.appendToCurrentBlock(postBlock);
+        func.setCurrBlock(postBlock);
     }
 }
