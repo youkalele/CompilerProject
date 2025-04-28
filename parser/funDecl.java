@@ -57,12 +57,12 @@ public class funDecl extends Declaration {
         if(!params.isEmpty())
         {
             FuncParam head = new FuncParam(1, params.get(0).getId().getData(), params.get(0).isArray());
-
+            func.getTable().put(params.get(0).getId().getData(), func.getNewRegNum());
             FuncParam prevParam = head;
             for(int i = 1; i<params.size(); i++)
             {
                 FuncParam p = new FuncParam(1, params.get(i).getId().getData(), params.get(i).isArray());
-                func.getTable().put(func.getNewRegNum(), params.get(i).getId().getData());
+                func.getTable().put(params.get(i).getId().getData(), func.getNewRegNum());
 
                 prevParam.setNextParam(p);
                 prevParam = p;
