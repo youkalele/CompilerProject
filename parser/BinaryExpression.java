@@ -1,8 +1,11 @@
 package parser;
 
-import scanner.Token;
-import lowlevel.*;
+import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operand.OperandType;
+import lowlevel.Operation;
+import lowlevel.Operation.OperationType;
+import scanner.Token;
 
 public class BinaryExpression extends Expression{
     private Expression lhs;
@@ -91,13 +94,13 @@ public class BinaryExpression extends Expression{
         //get a new register for your result
         regNum = func.getNewRegNum();
         //add Operation to do your function
-        OperationType operand;
+        OperationType operand=null;
         switch (opType.getType().name()) {
             case "NOTEQUAL":
                 operand = OperationType.NOT_EQUAL;
                 break;
             case "EQUALS":
-                operand = OperationType.EQ;
+                operand = OperationType.EQUAL;
                 break;
             case "LT":
                 operand = OperationType.LT;
@@ -109,30 +112,31 @@ public class BinaryExpression extends Expression{
                 operand = OperationType.GT;
                 break;
             case "GOET":
-                operand = OperationType.GET;
+                operand = OperationType.GTE;
                 break;
             case "PLUS":
-                operand = OperationType.Add_I;
+                operand = OperationType.ADD_I;
                 break;
             case "MINUS":
-                operand = OperationType.Sub_I;
+                operand = OperationType.SUB_I;
                 break;
             case "TIMES":
-                operand = OperationType.Mul_I;
+                operand = OperationType.MUL_I;
                 break;
             case "DIVIDE":
-                operand = OperationType.Div_I;
+                operand = OperationType.DIV_I;
                 break;
             default:
-                throw new Exception("Womp womp");
+                //throw new Exception("Womp womp");
                 break;
+        }
         Operation oper = new Operation(operand, func.getCurrBlock());
         Operand lhsOper = new Operand(OperandType.INTEGER, lhs.getRegNum());
         Operand rhsOper = new Operand(OperandType.INTEGER, rhs.getRegNum());
-        oper.setSrcOperand(lhsOper);
-        oper.setSrcOperand(rhsOper);
+        oper.setSrcOperand(0, lhsOper);
+        oper.setSrcOperand(1, rhsOper);
         Operand result = new Operand (OperandType.INTEGER, this.regNum);
-        oper.setDestOperand(result);
-        func.getCurrBlock().appendOperation(oper);
+        oper.setDestOperand(0, result);
+        func.getCurrBlock().appendOper(oper);
     }
 }
