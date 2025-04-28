@@ -27,6 +27,7 @@ public class CMinusCompiler implements Compiler {
            File outFileFile = new File(filePrefix + ".ll");
            PrintWriter outfile = new PrintWriter(outFileFile);
            head.printLLCode(outfile);
+           outfile.close();
 
         } catch (IOException ioe) {
 

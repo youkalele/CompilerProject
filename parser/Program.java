@@ -35,7 +35,7 @@ public class Program {
         
         CodeItem head = decls.get(0).genLLcode();
         CodeItem prevDecl = head;
-        for(int i = 1; i<decls.size()-1; i++)
+        for(int i = 1; i<decls.size(); i++)
         {
             CodeItem declItem = decls.get(i).genLLcode();
             prevDecl.setNextItem(declItem);

@@ -25,7 +25,7 @@ public class VarDecl extends Declaration{
     }
 
     //should have 2 versions
-    public CodeItem genLLCode() {
+    public CodeItem genLLcode() {
         Data decl;
         if(arrVal==-1)
             decl = new Data(Data.TYPE_INT, id.getData());

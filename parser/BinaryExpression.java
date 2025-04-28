@@ -123,11 +123,11 @@ public class BinaryExpression extends Expression{
                 break;
         }
         Operation oper = new Operation(operand, func.getCurrBlock());
-        Operand lhsOper = new Operand(OperandType.INTEGER, lhs.getRegNum());
-        Operand rhsOper = new Operand(OperandType.INTEGER, rhs.getRegNum());
+        Operand lhsOper = new Operand(OperandType.REGISTER, lhs.getRegNum());
+        Operand rhsOper = new Operand(OperandType.REGISTER, rhs.getRegNum());
         oper.setSrcOperand(0, lhsOper);
         oper.setSrcOperand(1, rhsOper);
-        Operand result = new Operand (OperandType.INTEGER, this.regNum);
+        Operand result = new Operand (OperandType.REGISTER, this.regNum);
         oper.setDestOperand(0, result);
         func.getCurrBlock().appendOper(oper);
     }
