@@ -2,6 +2,7 @@ package parser;
 
 import scanner.Token;
 import lowlevel.*;
+import lowlevel.Operand.OperandType;
 
 public class BinaryExpression extends Expression{
     private Expression lhs;
@@ -87,8 +88,6 @@ public class BinaryExpression extends Expression{
         lhs.genLLcode(func);
         rhs.genLLcode(func);
         //get location of where children stored their results
-        lhsRegNum = lhs.getRegNum();
-        rhsRegNum = rhs.getRegNum();
         //get a new register for your result
         regNum = func.getNewRegNum();
         //add Operation to do your function
@@ -127,8 +126,13 @@ public class BinaryExpression extends Expression{
             default:
                 throw new Exception("Womp womp");
                 break;
-        BasicBlock block = new BasicBlock(func);
-        Operation oper = new Operation(operand, block);
-        func.appendBlock(block);
+        Operation oper = new Operation(operand, func.getCurrBlock());
+        Operand lhsOper = new Operand(OperandType.INTEGER, lhs.getRegNum());
+        Operand rhsOper = new Operand(OperandType.INTEGER, rhs.getRegNum());
+        oper.setSrcOperand(lhsOper);
+        oper.setSrcOperand(rhsOper);
+        Operand result = new Operand (OperandType.INTEGER, this.regNum);
+        oper.setDestOperand(result);
+        func.getCurrBlock().appendOperation(oper);
     }
 }
