@@ -2,6 +2,8 @@ package parser;
 import java.util.ArrayList;
 
 import lowlevel.CodeItem;
+import lowlevel.Operand.OperandType;
+import lowlevel.Operation.OperationType;
 import scanner.Token;
 import lowlevel.*;
 
@@ -39,8 +41,13 @@ public class CallExpression extends Expression{
     public void genLLcode(Function func) {
         //a bit more complicated
         //call genCode on params to generate code for them (order doesn't matter because we're doing x64)
+        for (Expression expression : args) {
+            expression.genLLcode(func);
+        }
         //add operation to move each param to register or memory
+        Operation move = new Operation(OperationType.ASSIGN, func.getCurrBlock());
         //add call operation
+        Operation call = new Operation(OperationType.CALL, func.getCurrBlock());
         //May want to add a Macro Operation for PostCall
         //  Or let a later pass just handle this
         //  For project, you will annotate Call with param size
