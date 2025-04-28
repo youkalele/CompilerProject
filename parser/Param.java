@@ -18,7 +18,7 @@ public class Param {
     }
     public void genLLcode(Function func)
     {
-        
+        return;
     }
 
     public Token getId()
