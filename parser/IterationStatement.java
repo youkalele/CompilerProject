@@ -40,8 +40,8 @@ public class IterationStatement extends Statement {
         
         Operand expr = new Operand(Operand.OperandType.REGISTER, booleanExpression.getRegNum()); 
         Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
-        Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock);
-        Operand thenOperand = new Operand(Operand.OperandType.BLOCK, thenBlock);
+        Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
+        Operand thenOperand = new Operand(Operand.OperandType.BLOCK, thenBlock.getBlockNum());
 
         //branch to post if condition is false
         Operation beq = new Operation(Operation.OperationType.BEQ, func.getCurrBlock());

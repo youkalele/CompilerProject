@@ -41,7 +41,7 @@ public class ReturnStatement extends Statement {
             func.getCurrBlock().appendOper(move);
             //Add jump Operation to exit block
         }
-            Operand exitBlock = new Operand(OperandType.BLOCK, func.getReturnBlock());
+            Operand exitBlock = new Operand(OperandType.BLOCK, func.getReturnBlock().getBlockNum());
             Operation jump = new Operation(OperationType.JMP, func.getCurrBlock());
             jump.setSrcOperand(0, exitBlock);
             func.getCurrBlock().appendOper(jump);

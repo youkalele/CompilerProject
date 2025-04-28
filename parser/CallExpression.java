@@ -1,6 +1,7 @@
 package parser;
 import java.util.ArrayList;
 
+import lowlevel.Attribute;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operand.OperandType;
@@ -45,21 +46,26 @@ public class CallExpression extends Expression{
     }
 
     public void genLLcode(Function func) {
+        int i = 0;
         for (Expression expression : args) {
             expression.genLLcode(func);
 
             Operand param = new Operand(OperandType.REGISTER, expression.getRegNum());
             Operation pass = new Operation(OperationType.PASS, func.getCurrBlock());
+            pass.addAttribute(new Attribute("PARAM_NUM", Integer.toString(i)));
             pass.setSrcOperand(0, param);
             func.getCurrBlock().appendOper(pass);
+            i++;
         }
 
         //add call operation
         Operation call = new Operation(OperationType.CALL, func.getCurrBlock());
+        call.addAttribute(new Attribute("numParams", Integer.toString(this.getParamNum())));
         Operand funcName= new Operand(OperandType.STRING, id.getData());
         call.setSrcOperand(0, funcName);
         this.regNum = func.getNewRegNum();
-
+        func.getCurrBlock().appendOper(call);
+        
         Operand retReg = new Operand(OperandType.MACRO, "RetReg");
         Operand thisReg = new Operand(OperandType.REGISTER, this.regNum);
         Operation move = new Operation(OperationType.ASSIGN, func.getCurrBlock());

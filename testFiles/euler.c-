@@ -1,0 +1,48 @@
+
+void putDigit(int s) {
+   putchar(48+s);
+}
+
+void printInt(int x) {
+	int y;
+	int z;
+	if (x < 0){
+		putchar(45);
+		x = 0 - x;
+	}
+	z = x;
+	x = x / 10;
+	y = z - x * 10;
+	if (x > 0){
+		printInt(x);
+	}
+	
+    putDigit(y);
+}
+
+int euler(int x, int y){
+	if (y == 0){
+		if (x < 0){
+			return 0 - x;
+		}
+		else {
+			return x;
+		}
+	}
+	
+	x = x - x / y * y;
+	return (euler(y, x));
+}
+
+int main (void) {
+
+  int x;
+  int y;
+  x = 60;
+  y = 0 - 150;
+  
+  printInt(euler(x,y));
+  putchar(10);
+  return 0;
+}
+

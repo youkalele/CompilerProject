@@ -56,8 +56,8 @@ public class SelectionStatement extends Statement {
         Operation branch = new Operation(Operation.OperationType.BEQ, func.getCurrBlock());
         Operand expr = new Operand(Operand.OperandType.REGISTER, booleanExpression.getRegNum());
         Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
-        Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock);
-        Operand elseOperand = new Operand(Operand.OperandType.BLOCK, elseBlock);
+        Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
+        Operand elseOperand = new Operand(Operand.OperandType.BLOCK, elseBlock.getBlockNum());
         branch.setSrcOperand(0, expr);
         branch.setSrcOperand(1, zero);
         if(elsePart==null)
