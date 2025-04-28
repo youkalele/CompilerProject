@@ -1,11 +1,13 @@
-import compiler.*;
-import parser.*;
-import lowlevel.*;
-import java.io.IOException;
-import java.io.FileWriter;
+import java.util.HashMap;
+
+import compiler.Compiler;
+import lowlevel.CodeItem;
+import parser.CMinusParser;
+import parser.Program;
 
 public class CMinusCompiler implements Compiler {
 
+    public static HashMap globalHash = new HashMap(); 
 
     public CMinusCompiler() {
     }
