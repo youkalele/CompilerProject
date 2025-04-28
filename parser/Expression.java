@@ -20,6 +20,6 @@ public abstract class Expression {
 
     public void genLLcode(Function func)
     {
-        
+        regNum = func.getNewRegNum();
     }
 }
