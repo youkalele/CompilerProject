@@ -1,11 +1,12 @@
 package parser;
 import java.util.ArrayList;
 
-import lowlevel.CodeItem;
+import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operand.OperandType;
+import lowlevel.Operation;
 import lowlevel.Operation.OperationType;
 import scanner.Token;
-import lowlevel.*;
 
 public class CallExpression extends Expression{
     private Token id;
@@ -38,24 +39,33 @@ public class CallExpression extends Expression{
 
         return exprString;
     }
+    public int getParamNum()
+    {
+        return args.size();
+    }
 
     public void genLLcode(Function func) {
-        //a bit more complicated
-        //call genCode on params to generate code for them (order doesn't matter because we're doing x64)
         for (Expression expression : args) {
             expression.genLLcode(func);
+
+            Operand param = new Operand(OperandType.REGISTER, expression.getRegNum());
+            Operation pass = new Operation(OperationType.PASS, func.getCurrBlock());
+            pass.setSrcOperand(0, param);
+            func.getCurrBlock().appendOper(pass);
         }
-        //add operation to move each param to register or memory
-        Operation move = new Operation(OperationType.ASSIGN, func.getCurrBlock());
+
         //add call operation
         Operation call = new Operation(OperationType.CALL, func.getCurrBlock());
-        //May want to add a Macro Operation for PostCall
-        //  Or let a later pass just handle this
-        //  For project, you will annotate Call with param size
+        Operand funcName= new Operand(OperandType.STRING, id.getData());
+        call.setSrcOperand(0, funcName);
+        this.regNum = func.getNewRegNum();
 
-        //Need to move return register into regular register
-        //And annotate the Call node with this register
-        //  What about saving registers, ala caller-save convention?
-        regNum = func.getNewRegNum();
+        Operand retReg = new Operand(OperandType.MACRO, "RetReg");
+        Operand thisReg = new Operand(OperandType.REGISTER, this.regNum);
+        Operation move = new Operation(OperationType.ASSIGN, func.getCurrBlock());
+        move.setSrcOperand(0, retReg);
+        move.setDestOperand(0, thisReg);
+
+        func.getCurrBlock().appendOper(move);
     }
 }

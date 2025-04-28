@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 import compiler.Compiler;
@@ -20,6 +22,9 @@ public class CMinusCompiler implements Compiler {
            Program ast = parsingBoy.parse();
 
            CodeItem head = ast.genLLcode(); //FIXME starting at program and going down the tree: returns the head of the linked list
+           File outFileFile = new File("outfile.ll");
+           PrintWriter outfile = new PrintWriter(outFileFile);
+           head.printLLCode(outfile);
 
         } catch (Exception ioe) {
 
@@ -31,5 +36,6 @@ public class CMinusCompiler implements Compiler {
         String filePrefix = args[1];
         CMinusCompiler myCompiler = new CMinusCompiler();
         myCompiler.compile(filePrefix);
+
     }
 }
