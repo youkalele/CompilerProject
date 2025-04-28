@@ -34,9 +34,9 @@ public class IterationStatement extends Statement {
         BasicBlock thenBlock = new BasicBlock(func);
         BasicBlock postBlock = new BasicBlock(func);
 
-        booleanExpression.genLLcode(func); //which register does this result to?
+        booleanExpression.genLLcode(func); 
         
-        Operand expr = new Operand(Operand.OperandType.REGISTER, booleanExpression.getRegNum()); // set this to the return of the expression
+        Operand expr = new Operand(Operand.OperandType.REGISTER, booleanExpression.getRegNum()); 
         Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
         Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock);
         Operand thenOperand = new Operand(Operand.OperandType.BLOCK, thenBlock);

@@ -24,7 +24,15 @@ public class VarDecl extends Declaration{
 
     //should have 2 versions
     public CodeItem genLLCode() {
-        Data data = new Data(); //generate new Data
+        Data decl;
+        if(arrVal==-1)
+            data = new Data(Data.TYPE_INT, id.getData());
+        else
+            data = new Data(Data.TYPE_INT, id.getData(), true, arrVal);
+
+        return decl;
+        
+        //generate new Data
         //link to other CodeItems in list
     }
 }
