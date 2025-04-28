@@ -92,8 +92,43 @@ public class BinaryExpression extends Expression{
         //get a new register for your result
         regNum = func.getNewRegNum();
         //add Operation to do your function
+        OperationType operand;
+        switch (opType.getType().name()) {
+            case "NOTEQUAL":
+                operand = OperationType.NOT_EQUAL;
+                break;
+            case "EQUALS":
+                operand = OperationType.EQ;
+                break;
+            case "LT":
+                operand = OperationType.LT;
+                break;
+            case "LOET":
+                operand = OperationType.LTE;
+                break;
+            case "GT":
+                operand = OperationType.GT;
+                break;
+            case "GOET":
+                operand = OperationType.GET;
+                break;
+            case "PLUS":
+                operand = OperationType.Add_I;
+                break;
+            case "MINUS":
+                operand = OperationType.Sub_I;
+                break;
+            case "TIMES":
+                operand = OperationType.Mul_I;
+                break;
+            case "DIVIDE":
+                operand = OperationType.Div_I;
+                break;
+            default:
+                throw new Exception("Womp womp");
+                break;
         BasicBlock block = new BasicBlock(func);
-        Operation oper = new Operation(opType, block);
+        Operation oper = new Operation(operand, block);
         func.appendBlock(block);
     }
 }

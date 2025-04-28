@@ -10,6 +10,7 @@ import lowlevel.*;
 public class CallExpression extends Expression{
     private Token id;
     private ArrayList<Expression> args;
+    protected int regNum;
 
     public CallExpression(Token idToken, ArrayList<Expression> e)
     {
@@ -51,8 +52,10 @@ public class CallExpression extends Expression{
         //May want to add a Macro Operation for PostCall
         //  Or let a later pass just handle this
         //  For project, you will annotate Call with param size
+
         //Need to move return register into regular register
         //And annotate the Call node with this register
         //  What about saving registers, ala caller-save convention?
+        regNum = func.getNewRegNum();
     }
 }
