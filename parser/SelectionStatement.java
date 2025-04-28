@@ -51,30 +51,27 @@ public class SelectionStatement extends Statement {
         BasicBlock postBlock = new BasicBlock(func);
         BasicBlock elseBlock = new BasicBlock(func);
 
-
+        //evaluating branch
         booleanExpression.genLLcode(func);
-
         Operation branch = new Operation(Operation.OperationType.BEQ, func.getCurrBlock());
-
         Operand expr = new Operand(Operand.OperandType.REGISTER, booleanExpression.getRegNum());
         Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
         Operand postOperand = new Operand(Operand.OperandType.BLOCK, postBlock);
         Operand elseOperand = new Operand(Operand.OperandType.BLOCK, elseBlock);
-
         branch.setSrcOperand(0, expr);
         branch.setSrcOperand(1, zero);
-
         if(elsePart==null)
             branch.setSrcOperand(2, postOperand);
         else
             branch.setSrcOperand(2, elseOperand);
-
         func.getCurrBlock().appendOper(branch);
 
+        //move to thenBlock
         func.appendToCurrentBlock(thenBlock);
         func.setCurrBlock(thenBlock);
         stmt.genLLcode(func);
 
+        
         func.appendToCurrentBlock(postBlock);
 
         if(elsePart!=null)

@@ -1,6 +1,6 @@
 package parser;
 
-import lowlevel.*;
+import lowlevel.Function;
 
 public class ExpressionStatement extends Statement {
     private Expression expression;
@@ -21,8 +21,7 @@ public class ExpressionStatement extends Statement {
     }
 
     public void genLLcode(Function func) {
-        //Just call genCode on the Expr and do nothing else
-        
+        expression.genLLcode(func);
     }
 }
 

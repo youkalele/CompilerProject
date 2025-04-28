@@ -1,7 +1,9 @@
 package parser;
 
-import java.beans.Expression;
-import lowlevel.*;
+import lowlevel.BasicBlock;
+import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
 import lowlevel.Operation.OperationType;
 
 public class IterationStatement extends Statement {
