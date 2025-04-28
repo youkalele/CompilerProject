@@ -82,5 +82,6 @@ public class funDecl extends Declaration {
             func.appendBlock(func.getFirstUnconnectedBlock()); //FIXME
         }
 
+        return func;
     }
 }
