@@ -12,8 +12,6 @@ public class BinaryExpression extends Expression{
     private Token opType;
     private Expression rhs;
     protected int regNum;
-    protected int lhsRegNum;
-    protected int rhsRegNum;
 
     public BinaryExpression(Expression l, Token o, Expression r)
     {
@@ -78,12 +76,6 @@ public class BinaryExpression extends Expression{
     public void setRegNum(int num)
     {
         regNum=num;
-    }
-    public int getLHSRegNum() {
-        return rhsRegNum;
-    }
-    public int getRHSRegNum() {
-        return lhsRegNum;
     }
 
     public void genLLcode(Function func) {
