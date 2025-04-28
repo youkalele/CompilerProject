@@ -33,7 +33,7 @@ public class CMinusCompiler implements Compiler {
     }
 
     public static void main(String[] args) {
-        String filePrefix = args[1];
+        String filePrefix = "testFiles/test5";
         CMinusCompiler myCompiler = new CMinusCompiler();
         myCompiler.compile(filePrefix);
 
