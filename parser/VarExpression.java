@@ -1,5 +1,9 @@
 package parser;
+import compiler.CMinusCompiler;
 import lowlevel.Function;
+import lowlevel.LowLevelException;
+import lowlevel.Operand;
+import lowlevel.Operation;
 import scanner.Token;
 
 public class VarExpression extends Expression {
@@ -33,9 +37,37 @@ public class VarExpression extends Expression {
         return id;
     }
     public void genLLCode(Function func) {
-        //Just look up your location in the symbol table (if not already done in previous pass)
-        
-        //If global, create a load oper
+        String varName = id.getData();
+        int varRegNum=-1;
+        if(func.getTable().get(varName)!=null)
+        {
+            varRegNum = (int) func.getTable().get(varName);
+        }
+        else
+        {
+            if(CMinusCompiler.globalHash.get(varName.hashCode())!=null)
+            {
+                
+                Operation load= new Operation(Operation.OperationType.LOAD_I, func.getCurrBlock());
+                Operand name = new Operand(Operand.OperandType.STRING, varName);
+                varRegNum=func.getNewRegNum();
+                Operand dest = new Operand(Operand.OperandType.REGISTER, varRegNum);
+                Operand zero = new Operand(Operand.OperandType.INTEGER, 0);
+
+                load.setSrcOperand(0, name);
+                load.setSrcOperand(1, zero);
+                load.setDestOperand(0, dest);
+
+                func.getCurrBlock().appendOper(load);
+
+            }
+            else{
+                throw new LowLevelException("gay");
+            }
+
+        }
+
+        this.regNum=varRegNum;
         
     }
 }
