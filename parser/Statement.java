@@ -10,7 +10,7 @@ public abstract class Statement {
     }
     public void genLLcode(Function func)
     {
-        
+        return;
     }
     
 }

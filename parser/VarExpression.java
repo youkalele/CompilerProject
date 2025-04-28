@@ -62,7 +62,7 @@ public class VarExpression extends Expression {
 
             }
             else{
-                throw new LowLevelException("gay");
+                throw new LowLevelException("BONK");
             }
 
         }
